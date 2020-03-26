@@ -118,3 +118,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Auto-configure for Heroku based on environment variables
+import django_heroku
+django_heroku.settings(locals())
+
+if DEBUG:
+    # Disable SSL-forcing in development
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(ssl_require=False)
