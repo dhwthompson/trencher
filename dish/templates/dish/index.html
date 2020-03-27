@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dish list</title>
+    </head>
+    <body>
+        <h1>Dishes</h1>
+        <ul>
+        {% for dish in dishes %}
+            <li>{{ dish.name }}
+        {% endfor %}
+        </ul>
+    </body>
+</html>
