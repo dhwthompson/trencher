@@ -1,1 +1,1 @@
-web: gunicorn trencher.wsgi
+web: gunicorn -c conf.py trencher.wsgi
