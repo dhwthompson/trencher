@@ -10,5 +10,10 @@
             <li>{{ dish.name }}
         {% endfor %}
         </ul>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Add">
+        </form>
     </body>
 </html>

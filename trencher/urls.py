@@ -22,5 +22,5 @@ from dish import views as dish_views
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('admin/', admin.site.urls),
-    path('', dish_views.index),
+    path('', dish_views.index, name='index'),
 ]
