@@ -7,7 +7,7 @@ class DishAdmin(admin.ModelAdmin):
     model = Dish
     ingredient_limit = 4
 
-    list_display = ("name", "abbreviated_ingredients")
+    list_display = ("name", "abbreviated_ingredients", "has_url")
 
     def abbreviated_ingredients(self, obj):
         if not obj.ingredients:
@@ -21,6 +21,11 @@ class DishAdmin(admin.ModelAdmin):
         )
 
     abbreviated_ingredients.short_description = "ingredients"
+
+    def has_url(self, obj):
+        return bool(obj.recipe_url)
+
+    has_url.boolean = True
 
 
 admin.site.register(Dish, DishAdmin)
