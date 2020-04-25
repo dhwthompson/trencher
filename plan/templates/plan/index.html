@@ -12,6 +12,14 @@
         {% else %}
             <li>{{ meal.dish.name }}</li>
         {% endif %}
+        <form method="POST" action="{% url 'complete' pk=meal.id %}">
+            {% csrf_token %}
+            <button type="submit">✅</button>
+        </form>
+        <form method="POST" action="{% url 'cancel' pk=meal.id %}">
+            {% csrf_token %}
+            <button type="submit">❌</button>
+        </form>
         {% endfor %}
         </ul>
     </body>

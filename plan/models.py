@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.functions import Now
 
 from dish.models import Dish
 
@@ -33,4 +34,10 @@ class Meal(models.Model):
     cancelled_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f'Meal {self.id} ({self.dish.name})'
+        return f"Meal {self.id} ({self.dish.name})"
+
+    def mark_completed(self):
+        self.completed_at = Now()
+
+    def mark_cancelled(self):
+        self.cancelled_at = Now()
