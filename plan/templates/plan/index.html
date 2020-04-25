@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Current meals</title>
+    </head>
+    <body>
+        <h1>Current meals</h1>
+        <ul>
+        {% for meal in meals %}
+        {% if meal.date %}
+            <li> {{ meal.dish.name }} <strong>({{ meal.date|date:"D j" }})</strong></li>
+        {% else %}
+            <li>{{ meal.dish.name }}</li>
+        {% endif %}
+        {% endfor %}
+        </ul>
+    </body>
+</html>

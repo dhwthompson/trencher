@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
-from dish import views as dish_views
+from plan import views as plan_views
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('admin/', admin.site.urls),
-    path('', dish_views.index, name='index'),
+    path('', plan_views.index, name='index'),
 ]
