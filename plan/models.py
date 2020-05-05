@@ -4,12 +4,20 @@ from django.db.models.functions import Now
 from dish.models import Dish
 
 
+class Batch(models.Model):
+    class Meta:
+        verbose_name_plural = "batches"
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class Meal(models.Model):
     """Meal represents a planned meal.
 
     The meal currently has three potential states:
 
-    - Suggested: when we're planning to eat this, but haven't got around to it yet
+    - Suggested: when we're thinking about eating this, but haven't firmly decided
+    - Planned: when we've decided to eat this, and put the ingredients on our shopping list
     - Completed: when we've eaten the meal
     - Cancelled: when we've decided not to eat the meal (or the ingredients have gone bad, or something)
 
@@ -28,6 +36,9 @@ class Meal(models.Model):
 
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
+    batch = models.ForeignKey(
+        Batch, blank=True, null=True, on_delete=models.SET_NULL, related_name="meals"
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(blank=True, null=True)

@@ -1,7 +1,19 @@
 from django.contrib import admin
 from django.db.models.functions import Now
 
-from .models import Meal
+from .models import Batch, Meal
+
+
+class BatchMealAdmin(admin.TabularInline):
+
+    model = Meal
+    fields = ['dish', 'date']
+
+
+class BatchAdmin(admin.ModelAdmin):
+
+    model = Batch
+    inlines = [BatchMealAdmin]
 
 
 def complete_meal(modeladmin, request, queryset):
@@ -35,3 +47,4 @@ class MealAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Meal, MealAdmin)
+admin.site.register(Batch, BatchAdmin)
