@@ -1,0 +1,22 @@
+body {
+    font-family: Helvetica, sans-serif;
+}
+
+.meals li {
+    list-style-type: none;
+    display: flex;
+    border-top: 1px solid #999;
+}
+
+.meals form {
+    display: inline;
+}
+
+.meals .meal-name {
+    flex-grow: 2;
+    margin: auto 0;
+}
+
+.meals form button {
+    font-size: 2em;
+}

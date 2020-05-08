@@ -1,25 +1,29 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>Current meals</title>
+        <link rel="stylesheet" href="{% static "css/style.css" %}">
     </head>
     <body>
         <h1>Current meals</h1>
-        <ul>
+        <ul class="meals">
         {% for meal in meals %}
-        {% if meal.date %}
-            <li> {{ meal.dish.name }} <strong>({{ meal.date|date:"D j" }})</strong></li>
-        {% else %}
-            <li>{{ meal.dish.name }}</li>
-        {% endif %}
-        <form method="POST" action="{% url 'complete' pk=meal.id %}">
-            {% csrf_token %}
-            <button type="submit">✅</button>
-        </form>
-        <form method="POST" action="{% url 'cancel' pk=meal.id %}">
-            {% csrf_token %}
-            <button type="submit">❌</button>
-        </form>
+        <li>
+          {% if meal.date %}
+            <span class="meal-name">{{ meal.dish.name }} <strong>({{ meal.date|date:"D j" }})</strong></span>
+          {% else %}
+            <span class="meal-name">{{ meal.dish.name }}</span>
+          {% endif %}
+          <form method="POST" action="{% url 'complete' pk=meal.id %}">
+              {% csrf_token %}
+              <button type="submit">✅</button>
+          </form>
+          <form method="POST" action="{% url 'cancel' pk=meal.id %}">
+              {% csrf_token %}
+              <button type="submit">❌</button>
+          </form>
+        </li>
         {% endfor %}
         </ul>
     </body>

@@ -125,6 +125,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+]
+
 # Auto-configure for Heroku based on environment variables
 import django_heroku
 django_heroku.settings(locals())
