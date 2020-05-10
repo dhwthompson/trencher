@@ -37,5 +37,11 @@
           {% endfor %}
         </ul>
         {% endif %}
+        {% if no_ingredient_dishes %}
+        <p>Missing ingredients for:</p>
+        <ul>
+          {{ no_ingredient_dishes|unordered_list }}
+        </ul>
+        {% endif %}
     </body>
 </html>

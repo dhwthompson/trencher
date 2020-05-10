@@ -33,10 +33,18 @@ def shop(request):
 
     meals = Meal.objects.suggested()
     ingredients = set()
+    no_ingredient_dishes = []
     for meal in meals:
         ingredients = ingredients.union(meal.dish.ingredients)
+        if not meal.dish.ingredients:
+            no_ingredient_dishes.append(meal.dish)
 
-    context = {"meals": Meal.objects.suggested(), "ingredients": ingredients, "new_meal_form": new_meal_form}
+    context = {
+        "meals": Meal.objects.suggested(),
+        "ingredients": ingredients,
+        "no_ingredient_dishes": no_ingredient_dishes,
+        "new_meal_form": new_meal_form,
+    }
     return render(request, "plan/shop.html", context)
 
 
