@@ -23,6 +23,8 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('admin/', admin.site.urls),
     path('', plan_views.index, name='index'),
+    path('shop', plan_views.shop, name='shop'),
     path('meals/<int:pk>/complete', plan_views.complete, name='complete'),
     path('meals/<int:pk>/cancel', plan_views.cancel, name='cancel'),
+    path('meals/<int:pk>/delete', plan_views.delete, name='delete'),
 ]

@@ -2,9 +2,30 @@ body {
     font-family: Helvetica, sans-serif;
 }
 
+header {
+    display: flex;
+}
+
+header * {
+    text-align: center;
+    font-size: 2em;
+    flex-grow: 2;
+    margin: 0.5em 0;
+}
+
+header h1 {
+    font-weight: bold;
+}
+
+header a {
+    color: #999;
+    text-decoration: underline;
+}
+
 .meals {
     margin: 0;
     padding: 0;
+    border-bottom: 1px solid #999;
 }
 
 .meals li {
@@ -12,15 +33,22 @@ body {
     display: flex;
     border-top: 1px solid #999;
     padding-left: 1em;
+    min-height: 2.5em;
 }
 
-.meals form {
-    display: inline;
+.meals span {
+    margin: auto 0;
 }
 
-.meals .meal-name {
+.meals .meal-name, .meals .new-meal {
     flex-grow: 2;
     margin: auto 0;
+}
+
+.new-meal label {
+   position: absolute;
+   top: -9999px;
+   left: -9999px;
 }
 
 .meals form button {

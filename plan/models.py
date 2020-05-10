@@ -11,6 +11,14 @@ class Batch(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+class MealManager(models.Manager):
+    def suggested(self):
+        return self.filter(batch__isnull=True, completed_at=None, cancelled_at=None)
+
+    def planned(self):
+        return self.filter(batch__isnull=False, completed_at=None, cancelled_at=None)
+
+
 class Meal(models.Model):
     """Meal represents a planned meal.
 
@@ -25,6 +33,8 @@ class Meal(models.Model):
     feeling.
 
     """
+
+    objects = MealManager()
 
     class Meta:
         constraints = [

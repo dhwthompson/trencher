@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Shop</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static "css/style.css" %}">
+    </head>
+    <body>
+        <header>
+          <a href="{% url 'index' %}">Plan</a>
+          <h1>Shop</h1>
+        </header>
+        <ul class="meals">
+        {% for meal in meals %}
+        <li>
+            <span class="meal-name">{{ meal.dish.name }}</span>
+            <form method="POST" action="{% url 'delete' pk=meal.id %}">
+                {% csrf_token %}
+                <button type="submit">❌</button>
+            </form>
+        </li>
+        {% endfor %}
+        <li>
+          <form method="POST" class="new-meal">
+              {% csrf_token %}
+              {{ new_meal_form }}
+              <input type="submit" value="Add">
+          </form>
+        </li>
+        </ul>
+        <h2>Ingredients</h2>
+        <ul>
+          {% for ingredient in ingredients %}
+          <li>{{ ingredient }}</li>
+          {% endfor %}
+        </ul>
+    </body>
+</html>

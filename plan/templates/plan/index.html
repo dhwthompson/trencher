@@ -2,12 +2,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Current meals</title>
+        <title>Plan</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static "css/style.css" %}">
     </head>
     <body>
-        <h1>Current meals</h1>
+        <header>
+            <h1>Plan</h1>
+            <a href="{% url 'shop' %}">Shop</a>
+        </header>
         <ul class="meals">
         {% for meal in meals %}
         <li>
