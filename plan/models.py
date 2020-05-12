@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.functions import Now
 
@@ -9,6 +10,7 @@ class Batch(models.Model):
         verbose_name_plural = "batches"
 
     created_at = models.DateTimeField(auto_now_add=True)
+    ingredients_needed = ArrayField(models.CharField(max_length=50), blank=True, default=list)
 
 
 class MealManager(models.Manager):

@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
-from .models import Meal
+from .models import Batch, Meal
 
 
 @require_GET
@@ -41,11 +41,23 @@ def shop(request):
 
     context = {
         "meals": Meal.objects.suggested(),
-        "ingredients": ingredients,
+        "ingredients": sorted(ingredients),
         "no_ingredient_dishes": no_ingredient_dishes,
         "new_meal_form": new_meal_form,
     }
     return render(request, "plan/shop.html", context)
+
+
+@require_POST
+@login_required
+def order(request):
+    batch = Batch()
+    # TODO: assign meals to batch
+    batch.ingredients = [
+        ingredient for ingredient, status in request.POST.items() if status == "need"
+    ]
+    context = {"batch": batch}
+    return render(request, "plan/order.html", context)
 
 
 @require_POST
