@@ -15,10 +15,10 @@ class Batch(models.Model):
 
 class MealManager(models.Manager):
     def suggested(self):
-        return self.filter(batch__isnull=True, completed_at=None, cancelled_at=None)
+        return self.select_related('dish').filter(batch__isnull=True, completed_at=None, cancelled_at=None)
 
     def planned(self):
-        return self.filter(batch__isnull=False, completed_at=None, cancelled_at=None)
+        return self.select_related('dish').filter(batch__isnull=False, completed_at=None, cancelled_at=None)
 
 
 class Meal(models.Model):
