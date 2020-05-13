@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -137,3 +139,11 @@ if DEBUG:
     # Disable SSL-forcing in development
     import dj_database_url
     DATABASES['default'] = dj_database_url.config(ssl_require=False)
+
+try:
+    TODOIST_ACCESS_TOKEN = os.environ['TODOIST_ACCESS_TOKEN']
+    TODOIST_PROJECT_ID = int(os.environ['TODOIST_PROJECT_ID'])
+except KeyError as e:
+    raise ImproperlyConfigured(f'Missing configuration key {e.args[0]}')
+except ValueError as e:
+    raise ImproperlyConfigured(f'Todoist project ID setting must be an integer')

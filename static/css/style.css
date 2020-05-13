@@ -22,13 +22,13 @@ header a {
     text-decoration: underline;
 }
 
-.meals {
+.meals, .ingredients {
     margin: 0;
     padding: 0;
     border-bottom: 1px solid #999;
 }
 
-.meals li {
+.meals li, .ingredients li {
     list-style-type: none;
     display: flex;
     border-top: 1px solid #999;
@@ -36,11 +36,23 @@ header a {
     min-height: 2.5em;
 }
 
-.meals span {
+.meals span, .ingredients span {
     margin: auto 0;
 }
 
-.meals .meal-name, .meals .new-meal {
+.ingredients label {
+    margin: auto 0.5em;
+    vertical-align: middle;
+}
+
+.ingredients input {
+    margin: 0 0.25em;
+    padding: 0;
+    position: relative;
+    top: -0.1em;
+}
+
+.meals .meal-name, .meals .new-meal, .ingredients .ingredient-name {
     flex-grow: 2;
     margin: auto 0;
 }
@@ -51,6 +63,6 @@ header a {
    left: -9999px;
 }
 
-.meals form button {
+form button {
     font-size: 1.5em;
 }
