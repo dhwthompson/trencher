@@ -42,7 +42,7 @@ def shop(request):
             no_ingredient_dishes.append(meal.dish)
 
     context = {
-        "meals": Meal.objects.suggested(),
+        "meals": meals,
         "ingredients": sorted(ingredients),
         "no_ingredient_dishes": no_ingredient_dishes,
         "new_meal_form": new_meal_form,
