@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.forms import ModelForm
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from .models import Batch, Meal
+from .groceries import GroceryList
 
 
 @require_GET
@@ -50,13 +52,26 @@ def shop(request):
 
 @require_POST
 @login_required
+@transaction.atomic
 def order(request):
-    batch = Batch()
-    # TODO: assign meals to batch
-    batch.ingredients = [
+    ingredients_got = [
+        ingredient for ingredient, status in request.POST.items() if status == "have"
+    ]
+    ingredients_needed = [
         ingredient for ingredient, status in request.POST.items() if status == "need"
     ]
-    context = {"batch": batch}
+    batch = Batch.objects.create(ingredients_needed=ingredients_needed)
+    batch.meals.set(Meal.objects.suggested())
+
+    grocery_list = GroceryList.from_settings()
+    added = grocery_list.add_all(batch.ingredients_needed)
+    already_listed = [i for i in ingredients_needed if i not in added]
+
+    context = {
+        "added": added,
+        "already_got": ingredients_got,
+        "already_listed": already_listed,
+    }
     return render(request, "plan/order.html", context)
 
 

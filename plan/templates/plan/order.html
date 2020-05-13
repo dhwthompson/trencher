@@ -2,14 +2,26 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Shop</title>
+        <title>Order created</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static "css/style.css" %}">
     </head>
     <body>
-        {{ batch }}
+        <header>
+            <h1>Order created</h2>
+        </header>
+        <h2>Ingredients added</h2>
         <ul>
-        {{ batch.ingredients|unordered_list }}
+        {{ added|unordered_list }}
         </ul>
+        <h2>Ingredients we already have</h2>
+        <ul>
+        {{ already_got|unordered_list }}
+        </ul>
+        <h2>Ingredients already on the list</h2>
+        <ul>
+        {{ already_listed|unordered_list }}
+        </ul>
+        <a href="{% url 'index' %}">Return to meal plan</a>
     </body>
 </html>
