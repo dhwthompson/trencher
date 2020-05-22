@@ -64,5 +64,10 @@ header a {
 }
 
 form button {
-    font-size: 1.5em;
+    background-color: transparent;
+    border: solid #999 1px;
+    font-size: 1em;
+    margin-right: 0.5em;
+    padding: 0.5em;
+    white-space: nowrap;
 }

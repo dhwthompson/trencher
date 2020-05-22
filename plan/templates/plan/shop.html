@@ -17,7 +17,7 @@
             <span class="meal-name">{{ meal.dish.name }}</span>
             <form method="POST" action="{% url 'delete' pk=meal.id %}">
                 {% csrf_token %}
-                <button type="submit">❌</button>
+                <button type="submit">❌ Remove</button>
             </form>
         </li>
         {% endfor %}
@@ -25,7 +25,7 @@
           <form method="POST" class="new-meal">
               {% csrf_token %}
               {{ new_meal_form }}
-              <input type="submit" value="Add">
+              <button type="submit">😋 Add</button>
           </form>
         </li>
         </ul>
@@ -49,7 +49,7 @@
             </li>
             {% endfor %}
           </ul>
-          <button type="submit">🛒</button>
+          <button type="submit">🛒 Add to meal plan</button>
         </form>
         {% endif %}
         {% if no_ingredient_dishes %}
