@@ -62,7 +62,17 @@ header a {
     top: -0.1em;
 }
 
-.meals .meal-name, .meals .new-meal, .ingredients .ingredient-name {
+.meals .meal-name, .meals .new-meal select, .ingredients .ingredient-name {
+    flex-grow: 2;
+    margin: auto 0;
+}
+
+form.new-meal {
+    display: flex;
+    flex-grow: 2;
+}
+
+form.new-meal .meal-name {
     flex-grow: 2;
     margin: auto 0;
 }

@@ -24,7 +24,9 @@
         <li>
           <form method="POST" class="new-meal">
               {% csrf_token %}
-              {{ new_meal_form }}
+              <span class="meal-name">
+                  {{ new_meal_form }}
+              </span>
               <button type="submit">😋 Add</button>
           </form>
         </li>
