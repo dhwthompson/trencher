@@ -1,3 +1,5 @@
+import beeline
+
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.forms import ModelForm
@@ -64,8 +66,12 @@ def order(request):
     batch = Batch.objects.create(ingredients_needed=ingredients_needed)
     batch.meals.set(Meal.objects.suggested())
 
-    grocery_list = GroceryList.from_settings()
-    added = grocery_list.add_all(batch.ingredients_needed)
+    with beeline.tracer(name="grocery_init"):
+        grocery_list = GroceryList.from_settings()
+
+    with beeline.tracer(name="grocery_update"):
+        added = grocery_list.add_all(batch.ingredients_needed)
+
     already_listed = [i for i in ingredients_needed if i not in added]
 
     context = {
