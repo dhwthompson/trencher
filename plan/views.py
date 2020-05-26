@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.forms import ModelForm
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from .models import Batch, Meal
 from .groceries import GroceryList
+from .tracing import render
 
 
 @require_GET
