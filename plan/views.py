@@ -71,8 +71,14 @@ def order(request):
 
     with beeline.tracer(name="grocery_update"):
         added = grocery_list.add_all(batch.ingredients_needed)
-
-    already_listed = [i for i in ingredients_needed if i not in added]
+        already_listed = [i for i in ingredients_needed if i not in added]
+        beeline.add_context(
+            {
+                "ingredients.added": added,
+                "ingredients.already_got": ingredients_got,
+                "ingredients.already_listed": already_listed,
+            }
+        )
 
     context = {
         "added": added,
