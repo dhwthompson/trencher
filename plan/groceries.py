@@ -30,7 +30,9 @@ class GroceryList(object):
         added_ingredients = []
         for ingredient in ingredients:
             if not self._has_item(ingredient):
-                self._api.items.add(content=ingredient, project_id=self._project_id)
+                self._api.items.add(
+                    content=ingredient, project_id=self._project_id, checked=False
+                )
                 added_ingredients.append(ingredient)
         self._api.commit()
         return added_ingredients
