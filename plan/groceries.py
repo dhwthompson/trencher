@@ -13,13 +13,18 @@ class GroceryList(object):
     def from_settings(cls, settings=django_settings):
         return cls(settings.TODOIST_ACCESS_TOKEN, settings.TODOIST_PROJECT_ID)
 
+    def _items(self):
+        # Make sure we only return items that haven't been completed
+        return self._api.items.all(
+            lambda i: i["project_id"] == self._project_id and not i["checked"]
+        )
+
     def _has_item(self, item):
-        items = [
-            i["content"]
-            for i in self._api.items.all()
-            if i["project_id"] == self._project_id
-        ]
-        return item in items
+        for i in self._items():
+            if i["content"] == item:
+                return True
+
+        return False
 
     def add_all(self, ingredients):
         added_ingredients = []
