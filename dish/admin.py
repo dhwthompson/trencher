@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Dish, Ingredient
+from .models import Dish, Ingredient, IngredientSection
 
 
 class DishIngredientsAdmin(admin.TabularInline):
@@ -36,11 +36,28 @@ class DishAdmin(admin.ModelAdmin):
     has_url.boolean = True
 
 
+def assign_to_section_action(section):
+    def action(modeladmin, request, queryset):
+        queryset.update(section=section)
+
+    # We need to assign each action a unique name, or Django assumes they're
+    # the same action
+    action.__name__ = f"assign_to_{section.value}"
+    action.short_description = (
+        f'Assign selected ingredients to "{section.label}" section'
+    )
+
+    return action
+
+
 class IngredientAdmin(admin.ModelAdmin):
 
     model = Ingredient
 
     exclude = ('dishes',)
+    list_display = ("name", "section")
+
+    actions = [assign_to_section_action(s) for s in IngredientSection]
 
 
 admin.site.register(Dish, DishAdmin)
