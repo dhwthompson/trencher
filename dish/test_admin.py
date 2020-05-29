@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .admin import DishAdmin
-from .models import Dish
+from .models import Dish, Ingredient
 
 
 class DishAdminTestCase(TestCase):
@@ -8,19 +8,25 @@ class DishAdminTestCase(TestCase):
         self.admin = DishAdmin(Dish, admin_site=None)
 
     def test_no_ingredients(self):
-        dish = Dish(ingredients=[])
+        dish = Dish.objects.create(name="Tasty food")
         self.assertEqual(self.admin.abbreviated_ingredients(dish), "")
 
     def test_short_ingredient_list(self):
-        dish = Dish(ingredients=["Ham", "Eggs"])
+        dish = Dish.objects.create(name="Tasty food")
+        for ingredient in ["Ham", "Eggs"]:
+            dish.ingredients.create(name=ingredient)
         self.assertEqual(self.admin.abbreviated_ingredients(dish), "Ham, Eggs")
 
     def test_ingredient_list_at_limit(self):
-        dish = Dish(ingredients=["Ham", "Eggs", "Chips", "Beans"])
+        dish = Dish.objects.create(name="Tasty food")
+        for ingredient in ["Ham", "Eggs", "Chips", "Beans"]:
+            dish.ingredients.create(name=ingredient)
         self.assertEqual(self.admin.abbreviated_ingredients(dish), "Ham, Eggs, Chips, Beans")
 
     def test_ingredient_list_over_limit(self):
-        dish = Dish(ingredients=["Ham", "Eggs", "Chips", "Beans", "Sausage", "Caviar"])
+        dish = Dish.objects.create(name="Tasty food")
+        for ingredient in ["Ham", "Eggs", "Chips", "Beans", "Sausage", "Caviar"]:
+            dish.ingredients.create(name=ingredient)
         self.assertEqual(
             self.admin.abbreviated_ingredients(dish),
             "Ham, Eggs, Chips, Beans\u2026 (2 more)",
