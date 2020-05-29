@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
 from .models import Batch, Meal
+from dish.models import Dish, Ingredient
 from .groceries import GroceryList
 from .tracing import render
 
@@ -37,12 +38,17 @@ def shop(request):
         new_meal_form = NewMealForm()
 
     meals = Meal.objects.suggested()
-    ingredients = set()
+
+    dishes = Dish.objects.filter(meal__in=meals)
     no_ingredient_dishes = []
-    for meal in meals:
-        ingredients = ingredients.union(meal.dish.ingredients)
-        if not meal.dish.ingredients:
-            no_ingredient_dishes.append(meal.dish)
+
+    ingredients = Ingredient.objects.filter(dishes__meal__in=meals).values_list(
+        "name", flat=True
+    )
+
+    for dish in dishes:
+        if not dish.ingredients.count():
+            no_ingredient_dishes.append(dish)
 
     context = {
         "meals": meals,
