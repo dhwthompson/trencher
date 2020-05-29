@@ -15,6 +15,8 @@ class Dish(models.Model):
 
 
 class Ingredient(models.Model):
+    class Meta:
+        ordering = ["name"]
 
     name = models.CharField(max_length=200, unique=True)
     dishes = models.ManyToManyField(Dish, related_name="ingredients")

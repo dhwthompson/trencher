@@ -52,7 +52,7 @@ def shop(request):
 
     context = {
         "meals": meals,
-        "ingredients": sorted(ingredients),
+        "ingredients": ingredients,
         "no_ingredient_dishes": no_ingredient_dishes,
         "new_meal_form": new_meal_form,
     }
