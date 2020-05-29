@@ -54,7 +54,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
     model = Ingredient
 
-    exclude = ('dishes',)
+    exclude = ("dishes",)
     list_display = ("name", "section")
 
     actions = [assign_to_section_action(s) for s in IngredientSection]
