@@ -2,13 +2,18 @@ import todoist
 
 from django.conf import settings as django_settings
 
-from dataclasses import dataclass
 
-
-@dataclass
 class Item:
-    name: str
-    section: str = None
+
+    def __init__(self, name, section=None):
+        self.name = name
+        self.section = section
+
+    def __repr__(self):
+        if self.section is not None:
+            return f'Item({self.name!r}, section={self.section!r})'
+        else:
+            return f'Item({self.name!r})'
 
 
 class GroceryList(object):
