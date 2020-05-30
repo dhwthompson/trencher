@@ -8,7 +8,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 
 from .models import Batch, Meal
 from dish.models import Dish, Ingredient
-from .groceries import GroceryList
+from .groceries import GroceryList, Item
 from .tracing import render
 
 
@@ -63,31 +63,39 @@ def shop(request):
 @login_required
 @transaction.atomic
 def order(request):
+    ingredient_objects = Ingredient.objects.filter(name__in=request.POST)
+    ingredients_by_name = {i.name: i for i in ingredient_objects}
     ingredients_got = [
-        ingredient for ingredient, status in request.POST.items() if status == "have"
+        ingredients_by_name[i] for i, status in request.POST.items() if status == "have"
     ]
     ingredients_needed = [
-        ingredient for ingredient, status in request.POST.items() if status == "need"
+        ingredients_by_name[i] for i, status in request.POST.items() if status == "need"
     ]
-    batch = Batch.objects.create(ingredients_needed=ingredients_needed)
+    batch = Batch.objects.create(
+        ingredients_needed=[i.name for i in ingredients_needed]
+    )
     batch.meals.set(Meal.objects.suggested())
 
     with beeline.tracer(name="grocery_init"):
         grocery_list = GroceryList.from_settings()
 
     with beeline.tracer(name="grocery_update"):
-        added = grocery_list.add_all(batch.ingredients_needed)
-        already_listed = [i for i in ingredients_needed if i not in added]
+        ingredient_items = [
+            Item(name=i.name, section=i.get_section_display())
+            for i in ingredients_needed
+        ]
+        added = grocery_list.add_all(ingredient_items)
+        already_listed = [i.name for i in ingredient_items if i not in added]
         beeline.add_context(
             {
-                "ingredients.added": added,
+                "ingredients.added": [i.name for i in added],
                 "ingredients.already_got": ingredients_got,
                 "ingredients.already_listed": already_listed,
             }
         )
 
     context = {
-        "added": added,
+        "added": [i.name for i in added],
         "already_got": ingredients_got,
         "already_listed": already_listed,
     }
