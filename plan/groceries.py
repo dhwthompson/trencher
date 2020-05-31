@@ -4,6 +4,11 @@ from django.conf import settings as django_settings
 
 
 class Item:
+    """An item to add to the grocery list.
+
+    This class isn't much more than a two-value record, with a name and a
+    section. The section is None by default.
+    """
 
     def __init__(self, name, section=None):
         self.name = name
