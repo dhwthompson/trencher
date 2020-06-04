@@ -15,13 +15,13 @@ class DishAdminTestCase(TestCase):
         dish = Dish.objects.create(name="Tasty food")
         for ingredient in ["Ham", "Eggs"]:
             dish.ingredients.create(name=ingredient)
-        self.assertEqual(self.admin.abbreviated_ingredients(dish), "Ham, Eggs")
+        self.assertEqual(self.admin.abbreviated_ingredients(dish), "Eggs, Ham")
 
     def test_ingredient_list_at_limit(self):
         dish = Dish.objects.create(name="Tasty food")
         for ingredient in ["Ham", "Eggs", "Chips", "Beans"]:
             dish.ingredients.create(name=ingredient)
-        self.assertEqual(self.admin.abbreviated_ingredients(dish), "Ham, Eggs, Chips, Beans")
+        self.assertEqual(self.admin.abbreviated_ingredients(dish), "Beans, Chips, Eggs, Ham")
 
     def test_ingredient_list_over_limit(self):
         dish = Dish.objects.create(name="Tasty food")
@@ -29,5 +29,5 @@ class DishAdminTestCase(TestCase):
             dish.ingredients.create(name=ingredient)
         self.assertEqual(
             self.admin.abbreviated_ingredients(dish),
-            "Ham, Eggs, Chips, Beans\u2026 (2 more)",
+            "Beans, Caviar, Chips, Eggs\u2026 (2 more)",
         )
