@@ -27,6 +27,7 @@ class NewMealForm(ModelForm):
 
 
 @require_http_methods(["GET", "POST"])
+@login_required
 def shop(request):
     if request.method == "POST":
         new_meal_form = NewMealForm(request.POST)
