@@ -1,6 +1,76 @@
+import beeline
+import json
 import todoist
 
 from django.conf import settings as django_settings
+from django.core.cache import cache
+
+
+class CachingTodoistAPI(todoist.api.TodoistAPI):
+
+    """A subclassed version of the Todoist API that supports flexible caching.
+
+    The official version of the Todoist API only supports caching to a
+    directory in the file system, but it'd be nice to be able to use the
+    Django cache instead, as we don't have file system access.
+
+    The `cache` keyword argument should be something following the Django cache
+    API <https://docs.djangoproject.com/en/3.0/topics/cache/#basic-usage>.
+    Namely, it should have the methods:
+
+        get(key)
+        cache.set(key, value, timeout=DEFAULT_TIMEOUT, version=None)
+    """
+
+    STATE_KEY = "todoist_state"
+    SYNC_TOKEN_KEY = "todoist_sync_token"
+
+    def __init__(self, *args, **kwargs):
+        cache_obj = kwargs.get("cache")
+        if hasattr(cache_obj, "get") and hasattr(cache_obj, "set"):
+            kwargs.pop("cache")
+            self.cache_obj = cache_obj
+        else:
+            # Defer to the superclass implementation of a directory cache
+            self.cache_obj = None
+
+        super(CachingTodoistAPI, self).__init__(*args, **kwargs)
+
+    @beeline.traced(name="todoist_cache_read")
+    def _read_cache(self):
+        if self.cache_obj is None:
+            super(CachingTodoistAPI, self)._read_cache()
+            return
+
+        state = self.cache_obj.get(self.STATE_KEY)
+        beeline.add_context(
+            {
+                "state_cache_hit": state is not None,
+                "state_cache_length": len(state or ""),
+            }
+        )
+
+        if state:
+            self._update_state(json.loads(state))
+
+        sync_token = self.cache_obj.get(self.SYNC_TOKEN_KEY)
+        beeline.add_context({"sync_token_cache_hit": sync_token is not None})
+        self.sync_token = sync_token
+
+    @beeline.traced(name="todoist_cache_write")
+    def _write_cache(self):
+        if self.cache_obj is None:
+            super(CachingTodoistAPI, self)._write_cache()
+            return
+
+        result = json.dumps(
+            self.state, indent=2, sort_keys=True, default=todoist.api.state_default
+        )
+
+        beeline.add_context({"state_cache_length": len(result or "")})
+
+        self.cache_obj.set(self.STATE_KEY, result)
+        self.cache_obj.set(self.SYNC_TOKEN_KEY, self.sync_token)
 
 
 class Item:
@@ -23,7 +93,7 @@ class Item:
 
 class GroceryList(object):
     def __init__(self, access_token, project_id):
-        self._api = todoist.api.TodoistAPI(access_token)
+        self._api = CachingTodoistAPI(access_token, cache=cache)
         self._api.sync()
         self._project_id = project_id
 
