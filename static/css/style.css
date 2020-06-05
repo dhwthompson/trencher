@@ -85,6 +85,7 @@ form.new-meal .meal-name {
 
 form button {
     background-color: transparent;
+    box-shadow: 0 0 5px #ccc;
     border: solid #999 1px;
     font-size: 1em;
     margin-right: 0.5em;
