@@ -31,25 +31,19 @@
           </form>
         </li>
         </ul>
-        {% if ingredients %}
+        {% if ingredients_form %}
         <h2>Ingredients</h2>
         <form method="POST" action="{% url 'order' %}">
           {% csrf_token %}
           <ul class="ingredients">
-            {% for ingredient in ingredients %}
-            <li>
-              <span class="ingredient-name">{{ ingredient }}</span>
-                <label for="{{ ingredient }}-have">
-                  <input type="radio" id="{{ ingredient }}-have" name="{{ ingredient }}" value="have">
-                  Got it
-                </label>
-                <label for="{{ ingredient }}-need">
-                  <input type="radio" id="{{ ingredient }}-need" name="{{ ingredient }}" value="need">
-                  Need it
-                </label>
-              </input>
-            </li>
-            {% endfor %}
+              {% for field in ingredients_form %}
+              <li>
+                <span class="ingredient-name">{{ field.label }}</span>
+                {% for radio_option in field %}
+                {{ radio_option }}
+                {% endfor %}
+              </li>
+              {% endfor %}
           </ul>
           <button type="submit">🛒 Add to meal plan</button>
         </form>

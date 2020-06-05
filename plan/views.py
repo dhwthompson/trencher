@@ -6,8 +6,9 @@ from django.forms import ModelForm
 from django.shortcuts import redirect
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
-from .models import Batch, Meal
 from dish.models import Dish, Ingredient
+from .forms import IngredientOrderForm
+from .models import Batch, Meal
 from .groceries import GroceryList, Item
 from .tracing import render
 
@@ -39,20 +40,22 @@ def shop(request):
 
     meals = Meal.objects.suggested()
 
-    dishes = Dish.objects.filter(meal__in=meals)
-    no_ingredient_dishes = []
+    ingredient_objects = Ingredient.objects.filter(dishes__meal__in=meals)
 
-    ingredients = Ingredient.objects.filter(dishes__meal__in=meals).values_list(
-        "name", flat=True
+    ingredients_form = (
+        IngredientOrderForm(ingredients=ingredient_objects)
+        if ingredient_objects
+        else None
     )
 
-    for dish in dishes:
+    no_ingredient_dishes = []
+    for dish in Dish.objects.filter(meal__in=meals):
         if not dish.ingredients.count():
             no_ingredient_dishes.append(dish)
 
     context = {
         "meals": meals,
-        "ingredients": ingredients,
+        "ingredients_form": ingredients_form,
         "no_ingredient_dishes": no_ingredient_dishes,
         "new_meal_form": new_meal_form,
     }
@@ -63,18 +66,20 @@ def shop(request):
 @login_required
 @transaction.atomic
 def order(request):
-    ingredient_objects = Ingredient.objects.filter(name__in=request.POST)
-    ingredients_by_name = {i.name: i for i in ingredient_objects}
-    ingredients_got = [
-        ingredients_by_name[i] for i, status in request.POST.items() if status == "have"
-    ]
-    ingredients_needed = [
-        ingredients_by_name[i] for i, status in request.POST.items() if status == "need"
-    ]
-    batch = Batch.objects.create(
-        ingredients_needed=[i.name for i in ingredients_needed]
+    meals = Meal.objects.suggested()
+    ingredients_form = IngredientOrderForm(
+        request.POST, ingredients=Ingredient.objects.filter(dishes__meal__in=meals)
     )
-    batch.meals.set(Meal.objects.suggested())
+
+    # This is super hacky, but the only validation here is that all the
+    # ingredients have a value against them, and the widgets add that
+    # validation client-side.
+    assert ingredients_form.is_valid()
+
+    batch = Batch.objects.create(
+        ingredients_needed=[i.name for i in ingredients_form.needed]
+    )
+    batch.meals.set(meals)
 
     with beeline.tracer(name="grocery_init"):
         grocery_list = GroceryList.from_settings()
@@ -82,21 +87,21 @@ def order(request):
     with beeline.tracer(name="grocery_update"):
         ingredient_items = [
             Item(name=i.name, section=i.get_section_display())
-            for i in ingredients_needed
+            for i in ingredients_form.needed
         ]
         added = grocery_list.add_all(ingredient_items)
         already_listed = [i.name for i in ingredient_items if i not in added]
         beeline.add_context(
             {
                 "ingredients.added": [i.name for i in added],
-                "ingredients.already_got": ingredients_got,
+                "ingredients.already_got": ingredients_form.got,
                 "ingredients.already_listed": already_listed,
             }
         )
 
     context = {
         "added": [i.name for i in added],
-        "already_got": ingredients_got,
+        "already_got": ingredients_form.got,
         "already_listed": already_listed,
     }
     return render(request, "plan/order.html", context)
