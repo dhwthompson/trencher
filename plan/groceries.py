@@ -86,9 +86,9 @@ class Item:
 
     def __repr__(self):
         if self.section is not None:
-            return f'Item({self.name!r}, section={self.section!r})'
+            return f"Item({self.name!r}, section={self.section!r})"
         else:
-            return f'Item({self.name!r})'
+            return f"Item({self.name!r})"
 
 
 class GroceryList(object):
