@@ -56,11 +56,16 @@ class CachingTodoistAPI(todoist.api.TodoistAPI):
         sync_token = self.cache_obj.get(self.SYNC_TOKEN_KEY)
         beeline.add_context({"sync_token_cache_hit": sync_token is not None})
         self.sync_token = sync_token
+        self._last_cached_sync_token = sync_token
 
     @beeline.traced(name="todoist_cache_write")
     def _write_cache(self):
         if self.cache_obj is None:
             super(CachingTodoistAPI, self)._write_cache()
+            return
+
+        if self.sync_token == self._last_cached_sync_token:
+            # The sync token hasn't changed, so we can save some time
             return
 
         result = json.dumps(
@@ -71,6 +76,8 @@ class CachingTodoistAPI(todoist.api.TodoistAPI):
 
         self.cache_obj.set(self.STATE_KEY, result, timeout=None)
         self.cache_obj.set(self.SYNC_TOKEN_KEY, self.sync_token, timeout=None)
+
+        self._last_cached_sync_token = self.sync_token
 
 
 class Item:
