@@ -69,8 +69,8 @@ class CachingTodoistAPI(todoist.api.TodoistAPI):
 
         beeline.add_context({"state_cache_length": len(result or "")})
 
-        self.cache_obj.set(self.STATE_KEY, result)
-        self.cache_obj.set(self.SYNC_TOKEN_KEY, self.sync_token)
+        self.cache_obj.set(self.STATE_KEY, result, timeout=None)
+        self.cache_obj.set(self.SYNC_TOKEN_KEY, self.sync_token, timeout=None)
 
 
 class Item:
