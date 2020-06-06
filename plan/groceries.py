@@ -54,7 +54,9 @@ class CachingTodoistAPI(todoist.api.TodoistAPI):
             self._update_state(json.loads(state))
 
         sync_token = self.cache_obj.get(self.SYNC_TOKEN_KEY)
-        beeline.add_context({"sync_token_cache_hit": sync_token is not None})
+        beeline.add_context(
+            {"sync_token_cache_hit": sync_token is not None, "sync_token": sync_token}
+        )
         self.sync_token = sync_token
         self._last_cached_sync_token = sync_token
 
@@ -63,6 +65,13 @@ class CachingTodoistAPI(todoist.api.TodoistAPI):
         if self.cache_obj is None:
             super(CachingTodoistAPI, self)._write_cache()
             return
+
+        beeline.add_context(
+            {
+                "sync_token": self.sync_token,
+                "last_cached_sync_token": self._last_cached_sync_token,
+            }
+        )
 
         if self.sync_token == self._last_cached_sync_token:
             # The sync token hasn't changed, so we can save some time
