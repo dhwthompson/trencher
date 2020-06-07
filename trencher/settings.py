@@ -139,6 +139,8 @@ STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'static'),
 ]
 
+WHITENOISE_ROOT = os.path.join(BASE_DIR, 'static_root')
+
 # Auto-configure for Heroku based on environment variables
 import django_heroku
 django_heroku.settings(locals())
