@@ -10,6 +10,7 @@ class BatchMealAdmin(admin.TabularInline):
     fields = ['dish', 'date']
 
 
+@admin.register(Batch)
 class BatchAdmin(admin.ModelAdmin):
 
     model = Batch
@@ -30,6 +31,7 @@ def cancel_meal(modeladmin, request, queryset):
 cancel_meal.short_description = "Cancel selected meals"
 
 
+@admin.register(Meal)
 class MealAdmin(admin.ModelAdmin):
     model = Meal
 
@@ -44,7 +46,3 @@ class MealAdmin(admin.ModelAdmin):
 
     completed.boolean = True
     cancelled.boolean = True
-
-
-admin.site.register(Meal, MealAdmin)
-admin.site.register(Batch, BatchAdmin)

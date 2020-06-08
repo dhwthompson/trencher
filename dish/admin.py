@@ -8,6 +8,7 @@ class DishIngredientsAdmin(admin.TabularInline):
     model = Ingredient.dishes.through
 
 
+@admin.register(Dish)
 class DishAdmin(admin.ModelAdmin):
     model = Dish
     ingredient_limit = 4
@@ -55,6 +56,7 @@ def assign_to_section_action(section):
     return action
 
 
+@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
 
     model = Ingredient
@@ -63,7 +65,3 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ("name", "section")
 
     actions = [assign_to_section_action(s) for s in IngredientSection]
-
-
-admin.site.register(Dish, DishAdmin)
-admin.site.register(Ingredient, IngredientAdmin)
