@@ -1,14 +1,21 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
+class DishManager(models.Manager):
+    def active(self):
+        return self.filter(deactivated=False)
+
 
 class Dish(models.Model):
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "dishes"
 
+    objects = DishManager()
+
     name = models.CharField(max_length=200)
     recipe_url = models.URLField(max_length=300, blank=True)
+    deactivated = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

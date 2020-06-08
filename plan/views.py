@@ -2,7 +2,7 @@ import beeline
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField
 from django.shortcuts import redirect
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
@@ -27,6 +27,8 @@ class NewMealForm(ModelForm):
     class Meta:
         model = Meal
         fields = ["dish"]
+
+    dish = ModelChoiceField(queryset=Dish.objects.active())
 
 
 @require_http_methods(["GET", "POST"])
