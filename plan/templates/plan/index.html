@@ -10,7 +10,7 @@
     {% for meal in meals %}
     <li>
       {% if meal.dish.recipe_url %}
-      <span class="meal-name"><a href="{{ meal.dish.recipe_url }}">{{ meal.dish.name }}</a></span>
+      <span class="meal-name"><a href="{{ meal.dish.recipe_url }}" rel="noreferrer">{{ meal.dish.name }}</a></span>
       {% else %}
       <span class="meal-name">{{ meal.dish.name }}</span>
       {% endif %}
