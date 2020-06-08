@@ -1,61 +1,54 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Next &ndash; Trencher</title>
-        <meta name="apple-mobile-web-app-title" content="Trencher">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{% static "css/style.css" %}">
-    </head>
-    <body>
-        <header>
-          <a href="{% url 'index' %}">Now</a>
-          <h1>Next</h1>
-        </header>
-        <ul class="meals">
-        {% for meal in meals %}
-        <li>
-            <span class="meal-name">{{ meal.dish.name }}</span>
-            <form method="POST" action="{% url 'delete' pk=meal.id %}">
-                {% csrf_token %}
-                <button type="submit">❌ Remove</button>
-            </form>
-        </li>
-        {% endfor %}
-        <li>
-          <form method="POST" class="new-meal">
-              {% csrf_token %}
-              <span class="meal-name">
-                  {{ new_meal_form }}
-              </span>
-              <button type="submit">😋 Add</button>
-          </form>
-        </li>
-        </ul>
-        {% if ingredients_form %}
-        <h2>Ingredients</h2>
-        <form method="POST" action="{% url 'order' %}">
-          {% csrf_token %}
-          <ul class="ingredients">
-              {% for field in ingredients_form %}
-              <li>
-                <span class="ingredient-name">{{ field.label }}</span>
-                {% for radio_option in field %}
-                {{ radio_option }}
-                {% endfor %}
-              </li>
-              {% endfor %}
-          </ul>
-          <div class="form-foot">
-            <button type="submit">🛒 Add to meal plan</button>
-          </div>
+{% extends "base.html" %}
+
+{% block "header" %}
+    <a href="{% url 'index' %}">Now</a>
+    <h1>{{ page.title }}</h1>
+{% endblock %}
+
+{% block "body" %}
+    <ul class="meals">
+    {% for meal in meals %}
+    <li>
+        <span class="meal-name">{{ meal.dish.name }}</span>
+        <form method="POST" action="{% url 'delete' pk=meal.id %}">
+            {% csrf_token %}
+            <button type="submit">❌ Remove</button>
         </form>
-        {% endif %}
-        {% if no_ingredient_dishes %}
-        <p>Missing ingredients for:</p>
-        <ul>
-          {{ no_ingredient_dishes|unordered_list }}
-        </ul>
-        {% endif %}
-    </body>
-</html>
+    </li>
+    {% endfor %}
+    <li>
+      <form method="POST" class="new-meal">
+          {% csrf_token %}
+          <span class="meal-name">
+              {{ new_meal_form }}
+          </span>
+          <button type="submit">😋 Add</button>
+      </form>
+    </li>
+    </ul>
+    {% if ingredients_form %}
+    <h2>Ingredients</h2>
+    <form method="POST" action="{% url 'order' %}">
+      {% csrf_token %}
+      <ul class="ingredients">
+          {% for field in ingredients_form %}
+          <li>
+            <span class="ingredient-name">{{ field.label }}</span>
+            {% for radio_option in field %}
+            {{ radio_option }}
+            {% endfor %}
+          </li>
+          {% endfor %}
+      </ul>
+      <div class="form-foot">
+        <button type="submit">🛒 Add to meal plan</button>
+      </div>
+    </form>
+    {% endif %}
+    {% if no_ingredient_dishes %}
+    <p>Missing ingredients for:</p>
+    <ul>
+      {{ no_ingredient_dishes|unordered_list }}
+    </ul>
+    {% endif %}
+{% endblock %}

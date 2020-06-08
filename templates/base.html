@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ page.title }} &ndash; Trencher</title>
+        <meta name="apple-mobile-web-app-title" content="Trencher">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static "css/style.css" %}">
+    </head>
+    <body>
+      <header>
+        {% block "header" %}
+        <h1>{{ page.title }}</h1>
+        {% endblock %}
+      </header>
+      {% block "body" %}
+      {% endblock %}
+    </body>
+</html>

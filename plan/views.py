@@ -16,7 +16,10 @@ from .tracing import render
 @require_GET
 @login_required
 def index(request):
-    context = {"meals": Meal.objects.planned().order_by("date")}
+    context = {
+        "meals": Meal.objects.planned().order_by("date"),
+        "page": {"title": "Now"},
+    }
     return render(request, "plan/index.html", context)
 
 
@@ -59,6 +62,7 @@ def shop(request):
         "ingredients_form": ingredients_form,
         "no_ingredient_dishes": no_ingredient_dishes,
         "new_meal_form": new_meal_form,
+        "page": {"title": "Next"},
     }
     return render(request, "plan/shop.html", context)
 
@@ -104,6 +108,7 @@ def order(request):
         "added": [i.name for i in added],
         "already_got": ingredients_form.got,
         "already_listed": already_listed,
+        "page": {"title": "Order created"},
     }
     return render(request, "plan/order.html", context)
 
