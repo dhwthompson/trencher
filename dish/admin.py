@@ -12,7 +12,7 @@ class DishAdmin(admin.ModelAdmin):
     model = Dish
     ingredient_limit = 4
 
-    list_display = ("name", "abbreviated_ingredients", "has_url")
+    list_display = ("name", "abbreviated_ingredients", "active", "has_url")
     inlines = [DishIngredientsAdmin]
 
     def abbreviated_ingredients(self, obj):
@@ -29,6 +29,11 @@ class DishAdmin(admin.ModelAdmin):
         )
 
     abbreviated_ingredients.short_description = "ingredients"
+
+    def active(self, obj):
+        return not obj.deactivated
+
+    active.boolean = True
 
     def has_url(self, obj):
         return bool(obj.recipe_url)
