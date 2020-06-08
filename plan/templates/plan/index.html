@@ -9,7 +9,11 @@
     <ul class="meals">
     {% for meal in meals %}
     <li>
+      {% if meal.dish.recipe_url %}
+      <span class="meal-name"><a href="{{ meal.dish.recipe_url }}">{{ meal.dish.name }}</a></span>
+      {% else %}
       <span class="meal-name">{{ meal.dish.name }}</span>
+      {% endif %}
       <form method="POST" action="{% url 'complete' pk=meal.id %}">
           {% csrf_token %}
           <button type="submit">✅ Eaten</button>
