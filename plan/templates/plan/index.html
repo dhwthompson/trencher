@@ -20,7 +20,7 @@
       </form>
       <form method="POST" action="{% url 'cancel' pk=meal.id %}">
           {% csrf_token %}
-          <button type="submit">❌ Not eaten</button>
+          <button type="submit">❌ Delete</button>
       </form>
     </li>
     {% endfor %}
