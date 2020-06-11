@@ -49,6 +49,34 @@ header a {
     border-top: 1px solid #999;
 }
 
+.meals--dates .meal-name {
+  min-width: 100%;
+  font-weight: bold;
+}
+
+.meals--dates li {
+  flex-wrap: wrap;
+}
+
+.meals--dates .meal-date {
+    flex-grow: 2;
+    margin: auto 0;
+    color: #999;
+}
+
+.meals--dates .meal-date.set {
+    color: #000;
+}
+
+.meals:not(.meals--dates) .actions {
+  display: contents;
+}
+
+.meals--dates .actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .meals span, .ingredients span {
     margin: auto 0;
 }
@@ -68,6 +96,8 @@ header a {
 .meals .meal-name, .meals .new-meal select, .ingredients .ingredient-name {
     flex-grow: 2;
     margin: auto 0;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 }
 
 form.new-meal {
