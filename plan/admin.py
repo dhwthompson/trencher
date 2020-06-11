@@ -31,18 +31,35 @@ def cancel_meal(modeladmin, request, queryset):
 cancel_meal.short_description = "Cancel selected meals"
 
 
+class MealStateFilter(admin.SimpleListFilter):
+    title = "meal state"
+    parameter_name = "meal_state"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("suggested", "Suggested"),
+            ("planned", "Planned"),
+            ("eaten", "Eaten"),
+            ("cancelled", "Cancelled"),
+        )
+
+    def queryset(self, request, queryset):
+        if not self.value():
+            return
+
+        filters = {
+            "suggested": Meal.objects.suggested,
+            "planned": Meal.objects.planned,
+            "eaten": Meal.objects.eaten,
+            "cancelled": Meal.objects.cancelled,
+        }
+        return filters[self.value()](queryset=queryset)
+
+
 @admin.register(Meal)
 class MealAdmin(admin.ModelAdmin):
     model = Meal
 
-    list_display = ("__str__", "date", "created_at", "completed", "cancelled")
+    list_display = ("__str__", "date", "created_at")
+    list_filter = (MealStateFilter,)
     actions = [complete_meal, cancel_meal]
-
-    def completed(self, obj):
-        return obj.completed_at is not None
-
-    def cancelled(self, obj):
-        return obj.cancelled_at is not None
-
-    completed.boolean = True
-    cancelled.boolean = True

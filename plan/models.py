@@ -14,11 +14,29 @@ class Batch(models.Model):
 
 
 class MealManager(models.Manager):
-    def suggested(self):
-        return self.select_related('dish').filter(batch__isnull=True, completed_at=None, cancelled_at=None)
+    def suggested(self, queryset=None):
+        if queryset is None:
+            queryset = self.select_related('dish')
 
-    def planned(self):
-        return self.select_related('dish').filter(batch__isnull=False, completed_at=None, cancelled_at=None)
+        return queryset.filter(batch__isnull=True, completed_at=None, cancelled_at=None)
+
+    def planned(self, queryset=None):
+        if queryset is None:
+            queryset = self.select_related('dish')
+
+        return queryset.filter(batch__isnull=False, completed_at=None, cancelled_at=None)
+
+    def eaten(self, queryset=None):
+        if queryset is None:
+            queryset = self.select_related('dish')
+
+        return queryset.filter(completed_at__isnull=False)
+
+    def cancelled(self, queryset=None):
+        if queryset is None:
+            queryset = self.select_related('dish')
+
+        return queryset.filter(cancelled_at__isnull=False)
 
 
 class Meal(models.Model):
