@@ -7,7 +7,7 @@ from .models import Batch, Meal
 class BatchMealAdmin(admin.TabularInline):
 
     model = Meal
-    fields = ['dish', 'date']
+    fields = ["dish", "date"]
 
 
 @admin.register(Batch)
