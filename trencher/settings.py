@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'user.middleware.BeelineAuthMiddleware',
     'waffle.middleware.WaffleMiddleware',
+    'tracing.middleware.BeelineFlagMiddleware',
 ]
 
 ROOT_URLCONF = 'trencher.urls'
@@ -64,7 +65,10 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
         'LOCATION': 'cache_default',
-    }
+    },
+    'waffle': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
 }
 
 TEMPLATES = [
@@ -145,6 +149,8 @@ STATICFILES_DIRS = [
 ]
 
 WHITENOISE_ROOT = os.path.join(BASE_DIR, 'static_root')
+
+WAFFLE_CACHE_NAME = 'waffle'
 
 # Auto-configure for Heroku based on environment variables
 import django_heroku
