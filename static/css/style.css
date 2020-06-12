@@ -127,7 +127,7 @@ form button, .form-foot a {
     text-decoration: none;
 }
 
-.form-foot a:visited {
+.form-foot a, .form-foot a:visited {
   color: #000;
 }
 
