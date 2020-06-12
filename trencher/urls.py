@@ -23,6 +23,7 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
     path('admin/', admin.site.urls),
     path('', plan_views.index, name='index'),
+    path('dates', plan_views.dates, name='dates'),
     path('shop', plan_views.shop, name='shop'),
     path('order', plan_views.order, name='order'),
     path('meals/<int:pk>/complete', plan_views.complete, name='complete'),

@@ -116,7 +116,7 @@ form.new-meal .meal-name {
    left: -9999px;
 }
 
-form button {
+form button, .form-foot a {
     background-color: transparent;
     box-shadow: 0 0 5px #ccc;
     border: solid #999 1px;
@@ -124,6 +124,11 @@ form button {
     margin-right: 0.5em;
     padding: 0.5em;
     white-space: nowrap;
+    text-decoration: none;
+}
+
+.form-foot a:visited {
+  color: #000;
 }
 
 .form-foot {

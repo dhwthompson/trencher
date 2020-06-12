@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block "header" %}
+    <h1>{{ page.title }}</h1>
+    <a href="{% url 'shop' %}">Next</a>
+{% endblock %}
+
+{% block "body" %}
+    <form method="POST">
+      {% csrf_token %}
+      <ul class="meals meals--dates">
+      {% for item in items %}
+      <li>
+        <span class="meal-name">{{ item.meal.dish.name }}</span>
+        {{ item.form }}
+      </li>
+      {% endfor %}
+      </ul>
+      <div class="form-foot">
+          <a href="{% url 'index' %}">◀️ Back</a>
+        <button type="submit">📆 Save</button>
+      </div>
+    </form>
+{% endblock %}

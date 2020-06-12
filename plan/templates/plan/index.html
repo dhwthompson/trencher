@@ -40,4 +40,9 @@
     </li>
     {% endfor %}
     </ul>
+    {% flag "dates" %}
+    <div class="form-foot">
+      <a href="{% url 'dates' %}">📆 Plan dates</a>
+    </div>
+    {% endflag %}
 {% endblock %}
