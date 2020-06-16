@@ -70,7 +70,6 @@ class MealDateForm(ModelForm):
     date.label = ""
 
 
-@waffle_flag("dates")
 @require_http_methods(["GET", "POST"])
 @login_required
 def dates(request):

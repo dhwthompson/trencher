@@ -8,11 +8,7 @@
 {% endblock %}
 
 {% block "body" %}
-    {% flag "dates" %}
     <ul class="meals meals--dates">
-    {% else %}
-    <ul class="meals">
-    {% endflag %}
     {% for meal in meals %}
     <li>
       {% if meal.dish.recipe_url %}
@@ -20,13 +16,11 @@
       {% else %}
       <span class="meal-name">{{ meal.dish.name }}</span>
       {% endif %}
-      {% flag "dates" %}
       {% if meal.date %}
       <span class="meal-date set">{{ meal.date|date_name }}</span>
       {% else %}
       <span class="meal-date">Unscheduled</span>
       {% endif %}
-      {% endflag %}
       <span class="actions">
         <form method="POST" action="{% url 'complete' pk=meal.id %}">
             {% csrf_token %}
@@ -40,9 +34,7 @@
     </li>
     {% endfor %}
     </ul>
-    {% flag "dates" %}
     <div class="form-foot">
       <a href="{% url 'dates' %}">📆 Plan dates</a>
     </div>
-    {% endflag %}
 {% endblock %}
