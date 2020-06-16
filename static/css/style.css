@@ -49,32 +49,27 @@ header a {
     border-top: 1px solid #999;
 }
 
-.meals--dates .meal-name {
+.meals--now .meal-name {
   min-width: 100%;
   font-weight: bold;
 }
 
-.meals--dates li {
+.meals--now li {
   flex-wrap: wrap;
 }
 
-.meals--dates .meal-date {
+.meals--now .meal-date {
     flex-grow: 2;
     margin: auto 0;
     color: #999;
 }
 
-.meals--dates .meal-date.set {
+.meals--now .meal-date.set {
     color: #000;
 }
 
-.meals:not(.meals--dates) .actions {
+.meals .actions {
   display: contents;
-}
-
-.meals--dates .actions {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .meals span, .ingredients span {
