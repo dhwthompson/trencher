@@ -1,8 +1,10 @@
+from datetime import date
+
 from django.test import TestCase
 
 from dish.models import Ingredient
-
-from .forms import IngredientOrderForm
+from .forms import IngredientOrderForm, MealDateForm
+from .models import Meal
 
 
 class IngredientOrderFormTestCase(TestCase):
@@ -52,3 +54,70 @@ class IngredientOrderFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(0, len(form.needed))
         self.assertEqual(len(ingredients), len(form.got))
+
+
+class MealDateFormTestCase(TestCase):
+    def test_unset_option_exists(self):
+        meal = Meal()
+        form = MealDateForm(instance=meal)
+
+        date_choices = form.fields["date"].widget.choices
+        self.assertEqual(date_choices[0], ("", "-- Unscheduled --"))
+
+    def test_no_date_set(self):
+        meal = Meal()
+        today_func = lambda: date(2020, 2, 2)
+        form = MealDateForm(instance=meal, today_func=today_func)
+
+        self.assertEqual(
+            form.fields["date"].widget.choices,
+            [
+                ("", "-- Unscheduled --"),
+                ("2020-02-02", "Today"),
+                ("2020-02-03", "Tomorrow"),
+                ("2020-02-04", "Tuesday"),
+                ("2020-02-05", "Wednesday"),
+                ("2020-02-06", "Thursday"),
+                ("2020-02-07", "Friday"),
+                ("2020-02-08", "Saturday"),
+            ],
+        )
+
+    def test_date_in_range(self):
+        today_func = lambda: date(2020, 2, 2)
+        meal = Meal(date(2020, 2, 4))
+        form = MealDateForm(instance=meal, today_func=today_func)
+
+        self.assertEqual(
+            form.fields["date"].widget.choices,
+            [
+                ("", "-- Unscheduled --"),
+                ("2020-02-02", "Today"),
+                ("2020-02-03", "Tomorrow"),
+                ("2020-02-04", "Tuesday"),
+                ("2020-02-05", "Wednesday"),
+                ("2020-02-06", "Thursday"),
+                ("2020-02-07", "Friday"),
+                ("2020-02-08", "Saturday"),
+            ],
+        )
+
+    def test_date_out_of_range(self):
+        today_func = lambda: date(2020, 2, 2)
+        meal = Meal(date=date(2020, 2, 1))
+        form = MealDateForm(instance=meal, today_func=today_func)
+
+        self.assertEqual(
+            form.fields["date"].widget.choices,
+            [
+                ("", "-- Unscheduled --"),
+                ("2020-02-01", "Saturday 1 Feb"),
+                ("2020-02-02", "Today"),
+                ("2020-02-03", "Tomorrow"),
+                ("2020-02-04", "Tuesday"),
+                ("2020-02-05", "Wednesday"),
+                ("2020-02-06", "Thursday"),
+                ("2020-02-07", "Friday"),
+                ("2020-02-08", "Saturday"),
+            ],
+        )
