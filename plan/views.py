@@ -1,18 +1,15 @@
 import beeline
-from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.forms import DateField, Select, ModelForm, ModelChoiceField
 from django.shortcuts import redirect
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
-from django.utils import timezone
 
 from waffle.decorators import waffle_flag
 
 from dish.models import Dish, Ingredient
-from .dates import date_name
-from .forms import IngredientOrderForm
+from .forms import IngredientOrderForm, MealDateForm
 from .models import Batch, Meal
 from .groceries import GroceryList, Item
 from .tracing import render
@@ -26,48 +23,6 @@ def index(request):
         "page": {"title": "Now"},
     }
     return render(request, "plan/index.html", context)
-
-
-def choice_for_date(date, today=None):
-    return (date.isoformat(), date_name(date, today))
-
-
-def week_choices():
-    """Return available scheduling choices for the next week.
-
-    Include a "None" option, to remove an already-scheduled date.
-    """
-    today = timezone.localdate()
-    choices = [("", "-- Unscheduled --")]
-    for offset in range(7):
-        date = today + timedelta(days=offset)
-        choices.append(choice_for_date(date))
-    return choices
-
-
-class MealDateForm(ModelForm):
-    class Meta:
-        model = Meal
-        fields = ["date"]
-
-    def __init__(self, *args, **kwargs):
-        prefix = str(kwargs["instance"].id)
-        super(MealDateForm, self).__init__(*args, **kwargs, prefix=prefix)
-        if not self._instance_date_in_choices():
-            date_widget = self.fields["date"].widget
-            date_widget.choices = sorted(
-                date_widget.choices + [choice_for_date(self.instance.date)]
-            )
-
-    def _instance_date_in_choices(self):
-        if self.instance is None or self.instance.date is None:
-            return True
-
-        choice_values = [c[0] for c in self.fields["date"].widget.choices]
-        return self.instance.date.isoformat() in choice_values
-
-    date = DateField(required=False, widget=Select(choices=week_choices()))
-    date.label = ""
 
 
 @require_http_methods(["GET", "POST"])
