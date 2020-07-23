@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qc8dcmxn2sj)db4!*hnwn09dfbc0-wt5ph7943jtnn=h%!qg#^'
+SECRET_KEY = None
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG") == "true"
@@ -155,6 +155,9 @@ WAFFLE_CACHE_NAME = 'waffle'
 # Auto-configure for Heroku based on environment variables
 import django_heroku
 django_heroku.settings(locals())
+
+if not SECRET_KEY:
+    raise ImproperlyConfigured('Missing secret key from environment')
 
 if DEBUG:
     # Disable SSL-forcing in development
