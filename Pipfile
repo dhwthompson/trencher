@@ -11,7 +11,7 @@ gunicorn = "*"
 honeycomb-beeline = "*"
 todoist-python = "*"
 django-waffle = "*"
-Django = "*"
+Django = "~=3.1.4"
 
 [requires]
 python_version = "3.8"
