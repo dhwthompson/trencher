@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Dish, Ingredient, IngredientSection
+from .models import Dish, Ingredient, IngredientSection, IngredientStorage
 
 
 class DishIngredientsAdmin(admin.TabularInline):
@@ -42,6 +42,18 @@ class DishAdmin(admin.ModelAdmin):
     has_url.boolean = True
 
 
+def assign_to_storage_action(storage):
+    def action(modeladmin, request, queryset):
+        queryset.update(storage=storage)
+
+    # We need to assign each action a unique name, or Django assumes they're
+    # the same action
+    action.__name__ = f"assign_to_{storage.value}"
+    action.short_description = f'Assign selected ingredients to "{storage.label}"'
+
+    return action
+
+
 def assign_to_section_action(section):
     def action(modeladmin, request, queryset):
         queryset.update(section=section)
@@ -62,6 +74,8 @@ class IngredientAdmin(admin.ModelAdmin):
     model = Ingredient
 
     exclude = ("dishes",)
-    list_display = ("name", "section")
+    list_display = ("name", "section", "storage")
 
-    actions = [assign_to_section_action(s) for s in IngredientSection]
+    actions = [assign_to_section_action(s) for s in IngredientSection] + [
+        assign_to_storage_action(s) for s in IngredientStorage
+    ]
