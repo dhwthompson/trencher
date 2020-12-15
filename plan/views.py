@@ -1,4 +1,5 @@
 import beeline
+from collections import OrderedDict
 import itertools
 
 from django.contrib.auth.decorators import login_required
@@ -81,14 +82,19 @@ def shop(request):
     )
 
     if waffle.flag_is_active(request, "ingredient-storage"):
-        forms_by_storage = {}
-        ingredients = ingredient_objects.order_by("-storage")
+        # Python now preserves dictionary insertion order, but we still
+        # need OrderedDict to explicitly re-order items
+        forms_by_storage = OrderedDict()
+        ingredients = ingredient_objects.order_by("storage")
         for storage, storage_ingredients in itertools.groupby(
             ingredients, lambda i: i.get_storage_display()
         ):
             forms_by_storage[storage] = IngredientOrderForm(
                 ingredients=storage_ingredients
             )
+
+        if '' in forms_by_storage:
+            forms_by_storage.move_to_end('')
 
     no_ingredient_dishes = []
     for dish in Dish.objects.filter(meal__in=meals):
