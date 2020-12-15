@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load waffle_tags %}
 
 {% block "header" %}
     <a href="{% url 'index' %}">Now</a>
@@ -30,6 +31,21 @@
     <h2>Ingredients</h2>
     <form method="POST" action="{% url 'order' %}">
       {% csrf_token %}
+      {% flag "ingredient-storage" %}
+      {% for storage, form in forms_by_storage.items %}
+      <h3>{{ storage|default:"Ungrouped" }}</h3>
+      <ul class="ingredients">
+          {% for field in form %}
+          <li>
+            <span class="ingredient-name">{{ field.label }}</span>
+            {% for radio_option in field %}
+            {{ radio_option }}
+            {% endfor %}
+          </li>
+          {% endfor %}
+      </ul>
+      {% endfor %}
+      {% else %}
       <ul class="ingredients">
           {% for field in ingredients_form %}
           <li>
@@ -40,6 +56,7 @@
           </li>
           {% endfor %}
       </ul>
+      {% endflag %}
       <div class="form-foot">
         <button type="submit">🛒 Add to meal plan</button>
       </div>

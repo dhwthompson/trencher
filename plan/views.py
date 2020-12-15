@@ -1,4 +1,5 @@
 import beeline
+import itertools
 
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -6,7 +7,7 @@ from django.forms import DateField, Select, ModelForm, ModelChoiceField
 from django.shortcuts import redirect
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 
-from waffle.decorators import waffle_flag
+import waffle
 
 from dish.models import Dish, Ingredient
 from .forms import IngredientOrderForm, MealDateForm
@@ -79,6 +80,16 @@ def shop(request):
         else None
     )
 
+    if waffle.flag_is_active(request, "ingredient-storage"):
+        forms_by_storage = {}
+        ingredients = ingredient_objects.order_by("-storage")
+        for storage, storage_ingredients in itertools.groupby(
+            ingredients, lambda i: i.get_storage_display()
+        ):
+            forms_by_storage[storage] = IngredientOrderForm(
+                ingredients=storage_ingredients
+            )
+
     no_ingredient_dishes = []
     for dish in Dish.objects.filter(meal__in=meals):
         if not dish.ingredients.count():
@@ -91,6 +102,8 @@ def shop(request):
         "new_meal_form": new_meal_form,
         "page": {"title": "Next"},
     }
+    if waffle.flag_is_active(request, "ingredient-storage"):
+        context["forms_by_storage"] = forms_by_storage
     return render(request, "plan/shop.html", context)
 
 
