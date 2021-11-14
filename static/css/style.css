@@ -116,6 +116,7 @@ form button, .form-foot a {
     background-color: transparent;
     box-shadow: 0 0 5px #ccc;
     border: solid #999 1px;
+    color: black;
     font-size: 1em;
     margin-right: 0.5em;
     padding: 0.5em;
