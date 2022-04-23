@@ -14,7 +14,7 @@ class Dish(models.Model):
 
     objects = DishManager()
 
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     recipe_url = models.URLField(max_length=300, blank=True)
     deactivated = models.BooleanField(default=False)
 
