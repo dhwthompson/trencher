@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
+from dish import views as dish_views
 from plan import views as plan_views
 
 urlpatterns = [
@@ -26,6 +27,7 @@ urlpatterns = [
     path('dates', plan_views.dates, name='dates'),
     path('shop', plan_views.shop, name='shop'),
     path('order', plan_views.order, name='order'),
+    path('dishes/new', dish_views.new, name='new_dish'),
     path('meals/<int:pk>/complete', plan_views.complete, name='complete'),
     path('meals/<int:pk>/cancel', plan_views.cancel, name='cancel'),
     path('meals/<int:pk>/delete', plan_views.delete, name='delete'),

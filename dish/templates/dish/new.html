@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load waffle_tags %}
+
+{% block "header" %}
+    <h1>{{ page.title }}</h1>
+{% endblock %}
+
+{% block "body" %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">🍝 Add dish</button>
+    </form>
+{% endblock %}
