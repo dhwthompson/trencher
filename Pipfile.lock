@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1364e4a612ad2d326104f6dedaf9bc7d6378347ebba27fb02c90e5054de42abc"
+            "sha256": "c78f739de7219d45180549663117b7a60e97a957327e46548c49f80a70ab7136"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.8"
+            "python_version": "3.10"
         },
         "sources": [
             {
@@ -29,7 +29,7 @@
                 "sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d",
                 "sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==2022.6.15"
         },
         "charset-normalizer": {
@@ -37,7 +37,7 @@
                 "sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845",
                 "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==2.1.1"
         },
         "dj-database-url": {
@@ -81,11 +81,11 @@
         },
         "honeycomb-beeline": {
             "hashes": [
-                "sha256:53a694c42107f98167a2c610a3029a930f7e648c20641a07c6a401fd7990ff18",
-                "sha256:934e12987641faec7c56f831506d341a3e639a46c6fde3f8e83183bb2a3c212f"
+                "sha256:3a31409bd5aad78529a1e5bdd59fbea95b46aa1cce1663bc2f16680dca47c2ae",
+                "sha256:93c5eba0bd0773a0b9b386dc4045fa45028fc1bbd96495f00cdaf78894d5065f"
             ],
             "index": "pypi",
-            "version": "==2.18.0"
+            "version": "==3.4.1"
         },
         "idna": {
             "hashes": [
@@ -117,7 +117,7 @@
                 "sha256:cb10d44e6694d763fa1078a26f7f6137d69f555a78ec85dc2ef716c37447e4b2",
                 "sha256:d3ca6421b942f60c008f81a3541e8faf6865a28d5a9b48544b0ee4f40cac7fca"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==2.9.3"
         },
         "pytz": {
