@@ -19,25 +19,25 @@ If anyone else finds it useful to poke around with, that’s a nice bonus.
 As such, I haven’t put a whole lot of thought or effort into letting people swap out their own technologies.
 I’m running this on:
 
-* [Heroku][] because it’s the best platform I’ve found for small personal projects
-* Postgres because MySQL has bitten me one too many times
-* [Todoist][] because it’s the best to-do app I’ve found for my needs since [Microsoft shut down Wunderlist][wunderlist]
+* [Fly][], because Heroku decided to shut down their free tier
+* Postgres, because MySQL has bitten me one too many times
+* [Todoist][], because it’s the best to-do app I’ve found for my needs since [Microsoft shut down Wunderlist][wunderlist]
 
 If you want to use different tech, that’s perfectly fine, but you’ll probably need to write your own code, and the structure of the app might not make it easy.
 
-[Heroku]: https://www.heroku.com
+[Fly]: https://fly.io/
 [Todoist]: https://todoist.com/
 [wunderlist]: https://www.cnet.com/news/microsoft-to-replace-wunderlist-with-to-do-in-may-2020/
 
-Most of the customisation comes from environment variables, either through Heroku’s built-in mechanisms or configured manually.
+Most of the customisation comes from environment variables, either through your platform's built-in mechanisms or configured manually.
 The app knows about:
 
-* `DATABASE_URL` (set by Heroku; configured with [django-heroku][])
-* `SECRET_KEY` (set manually)
-* `TODOIST_ACCESS_TOKEN` (set manually)
-* `TODOIST_PROJECT_ID` (set manually)
-* `HONEYCOMB_API_KEY` (set manually)
-* `HONEYCOMB_DATASET` (set manually)
+* `DATABASE_URL`
+* `SECRET_KEY`
+* `TODOIST_ACCESS_TOKEN`
+* `TODOIST_PROJECT_ID`
+* `HONEYCOMB_API_KEY`
+* `HONEYCOMB_DATASET`
 
 If you don’t fancy setting up [Honeycomb][] for tracing data, you should be able to leave those environment variables unset, and Trencher should continue without them. I haven’t tested that recently, though, so no promises.
 

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+import dj_database_url
+
 from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'beeline.middleware.django.HoneyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -142,6 +145,7 @@ SECURE_SSL_REDIRECT = os.environ.get("FORCE_SSL") != "false"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
@@ -152,17 +156,17 @@ WHITENOISE_ROOT = os.path.join(BASE_DIR, 'static_root')
 
 WAFFLE_CACHE_NAME = 'waffle'
 
-# Auto-configure for Heroku based on environment variables
-import django_heroku
-django_heroku.settings(locals())
+if 'ALLOWED_HOSTS' in os.environ:
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(',')
+
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(ssl_require=False)
+
+if 'SECRET_KEY' in os.environ:
+    SECRET_KEY = os.environ['SECRET_KEY']
 
 if not SECRET_KEY:
     raise ImproperlyConfigured('Missing secret key from environment')
-
-if DEBUG:
-    # Disable SSL-forcing in development
-    import dj_database_url
-    DATABASES['default'] = dj_database_url.config(ssl_require=False)
 
 try:
     TODOIST_ACCESS_TOKEN = os.environ['TODOIST_ACCESS_TOKEN']
