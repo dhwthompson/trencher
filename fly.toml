@@ -9,7 +9,7 @@ processes = []
   ALLOWED_HOSTS = 'trencher.fly.dev'
   HONEYCOMB_DATASET = 'trencher'
   PORT = '8080'
-  TODOIST_PROJECT_ID = '2235955980'
+  TODOIST_PROJECT_ID = '2231284572'
 
 [experimental]
   allowed_public_ports = []
